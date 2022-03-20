@@ -28,6 +28,7 @@ const Login = (props) => {
         sessionStorage.setItem("access_token", resp.data.access_token);
         setUserContext(resp.data.access_token);
         setErrors({});
+        navigate("/user");
       })
       .catch((err) => setErrors(err.response.data));
   };

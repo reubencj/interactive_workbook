@@ -5,10 +5,10 @@ const UserContext = createContext();
 export const UserContextWrapper = (props) => {
   const [userContext, setUserContext] = useState();
 
-  const value = useMemo(() => ({ userContext, setUserContext }), [userContext]);
-
   return (
-    <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ userContext, setUserContext }}>
+      {props.children}
+    </UserContext.Provider>
   );
 };
 
