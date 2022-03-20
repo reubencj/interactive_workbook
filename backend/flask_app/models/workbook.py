@@ -20,8 +20,8 @@ class Workbook:
 
     @staticmethod
     def create_workbook( data):
-        query = """INSERT INTO workbooks(name,description, number_of_chapters, author_id) 
-        values(%(name)s, %(description)s,%(number_of_chapters)s, %(author_id)s)"""
+        query = """INSERT INTO workbooks(name,description,  author_id) 
+        values(%(name)s, %(description)s, %(author_id)s)"""
         return connectToMySQL().query_db(query,data)
         
 
@@ -34,8 +34,7 @@ class Workbook:
             errors["name"] = "Workbook Name needs to more than two characters"
         if not len(data["description"]) > 2:
             errors["description"] = "Workbook description needs to more than two characters"
-        if not data["number_of_chapters"].isdigit():
-            errors["number_of_chapters"] = "Number of Chapters should be number"
+       
         if not "author_id" in data.keys():
             errors["author_id"] = "Author ID is missing"
         return errors

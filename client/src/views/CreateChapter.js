@@ -2,31 +2,20 @@ import Textbox from "../components/Textbox";
 import Textarea from "../components/Textarea";
 import Alert from "../components/Alert";
 import { useState, React, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const CreateChapter = (props) => {
-  const { workbook_id, chapter_id } = useParams();
+  const { workbooks_id, chapter_number } = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
+  const [video_url, setVideoUrl] = useState("");
   const [numOfQuest, setNumOfQuest] = useState(0);
   const [questions, setQuestions] = useState({});
   const [qlist, setQList] = useState([]);
-  //   const handle_num_of_question = (num = 1) => {
-  //     let render_questions = [];
-  //     for (let i = 1; i <= 1; i++) {
-  //       setQuestions(...questions, (questions[`question_${i}`] = ""));
-
-  //       render_questions.append(
-  //         <div>
-  //           <label>Question {i} </label>
-  //           <input name="question" />
-  //         </div>
-  //       );
-  //     }
-  //     return render_questions;
-  //   };
+  const [errors, setError] = useState({});
+  const [success, setSuccess] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     let ls = [];
@@ -36,12 +25,34 @@ const CreateChapter = (props) => {
     setQList(ls);
   }, [numOfQuest]);
 
+  const handleSumbit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      workbooks_id,
+      title,
+      content,
+      questions,
+      chapter_number,
+      video_url,
+    };
+
+    axios
+      .post("http://localhost:8000/create_chapter", data)
+      .then((resp) => {
+        console.log(resp.data);
+        setSuccess(resp.data);
+        setError({});
+      })
+      .catch((err) => setError(err.response.data));
+  };
+
   return (
     <div className="container">
       <div className="row">
         <div className="col-md">
           <form>
-            <h2>Chapter {chapter_id}</h2>
+            <h2>Chapter {chapter_number}</h2>
             <Textbox
               name="title"
               value={title}
@@ -50,11 +61,11 @@ const CreateChapter = (props) => {
             />
             <Textbox
               name="video"
-              value={videoUrl}
+              value={video_url}
               setState={setVideoUrl}
               label="Video Url"
             />
-            <Textbox
+            <Textarea
               name="content"
               value={content}
               setState={setContent}
@@ -86,6 +97,26 @@ const CreateChapter = (props) => {
                   </div>
                 );
               })}
+            <button
+              onClick={(e) => {
+                handleSumbit(e);
+                // const next_chapter = parseInt(chapter_id) + 1;
+                // navigate(`/create_chapter/${workbook_id}/${next_chapter}`);
+              }}
+              className="btn btn-primary"
+            >
+              Next Chapter
+            </button>
+
+            <button
+              onClick={(e) => {
+                handleSumbit(e);
+                // navigate("/dashboard");
+              }}
+              className="btn btn-success"
+            >
+              Complete Workbook
+            </button>
           </form>
         </div>
       </div>

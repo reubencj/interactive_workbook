@@ -1,16 +1,14 @@
-import { createContext, useState } from "react";
-import LoginPage from "../views/LoginPage";
-import UserPage from "../views/UserPage";
-import App from "../App";
+import { createContext, useMemo, useState } from "react";
+
 const UserContext = createContext();
 
 export const UserContextWrapper = (props) => {
   const [userContext, setUserContext] = useState();
 
+  const value = useMemo(() => ({ userContext, setUserContext }), [userContext]);
+
   return (
-    <UserContext.Provider value={[userContext, setUserContext]}>
-      <App />
-    </UserContext.Provider>
+    <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
   );
 };
 

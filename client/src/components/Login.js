@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import Textbox from "./Textbox";
 import Alert from "./Alert";
-
+import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
@@ -12,6 +12,7 @@ const Login = (props) => {
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
+  const { userContext, setUserContext } = useContext(UserContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -23,11 +24,10 @@ const Login = (props) => {
     axios
       .post("http://localhost:8000/login", data)
       .then((resp) => {
-        setSuccess(resp.data);
-        console.log(success.session_data);
-
+        console.log(resp.data);
+        sessionStorage.setItem("access_token", resp.data.access_token);
+        setUserContext(resp.data.access_token);
         setErrors({});
-        navigate("/user");
       })
       .catch((err) => setErrors(err.response.data));
   };

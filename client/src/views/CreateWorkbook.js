@@ -8,7 +8,7 @@ import axios from "axios";
 const CreateWorkbook = (props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [noOfChapters, setNoOfChapters] = useState("");
+
   const [errors, setError] = useState({});
   const [success, setSuccess] = useState({});
   const { author_id } = useParams();
@@ -17,10 +17,9 @@ const CreateWorkbook = (props) => {
   const handleSumbit = (e) => {
     e.preventDefault();
     const data = {
-      name: name,
-      description: description,
-      number_of_chapters: noOfChapters,
-      author_id: author_id,
+      name,
+      description,
+      author_id,
     };
 
     axios
@@ -56,17 +55,6 @@ const CreateWorkbook = (props) => {
         />
 
         {errors.description && <Alert label={errors.description} />}
-
-        <Textbox
-          name="noOfChapters"
-          label="Numbber of Chapters"
-          type="number"
-          value={noOfChapters}
-          setState={setNoOfChapters}
-        />
-        {errors.number_of_chapters && (
-          <Alert label={errors.number_of_chapters} />
-        )}
 
         <button type="sumbit" className="btn btn-success">
           Create Workbook

@@ -1,12 +1,21 @@
 
 import re
+import os
 from flask_app import app
 from flask_app.models.user import User
-from flask import redirect, render_template, request, jsonify
+from flask import  request, jsonify
 from flask_bcrypt import Bcrypt
+
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_app import jwt
 
 # creating a bcyrpt object
 bcrypt = Bcrypt(app)
+
+
+
 
 # api endpoint to create a new user
 @app.route("/create_user", methods=["POST"])
@@ -32,9 +41,7 @@ def create_user():
    data["password"] = bcrypt.generate_password_hash(data["password"])
    #create user
    User.create_user(data)
-   new_user = User.get_user_by_email(data["email"])
-   session_data = User.convert_to_user_json(new_user)
-   return jsonify(message = "New User Created!",session_data = session_data )
+   return jsonify(message = "New User Created!, please Login" )
 
 
 @app.route("/login",methods=['POST'])
@@ -47,11 +54,14 @@ def login():
       return jsonify( {"login_password": "password does not match"}), 400
    
    session_data = User.convert_to_user_json(user)
-   return jsonify(message = "Logged in",session_data = session_data )
+   access_token = create_access_token(identity = session_data)
+   return jsonify(access_token = access_token)
 
 
-@app.route('/test', methods=['POST'])
-def testing():
-    print(request.json)
-    return jsonify(request = "done")
+@app.route('/welcome', methods=['GET'])
+@jwt_required()
+def welcome():
+   
+   print(get_jwt_identity())
+   return jsonify(request = "Welcome")
 

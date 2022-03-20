@@ -5,26 +5,28 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserPage from "./views/UserPage";
 import CreateWorkbook from "./views/CreateWorkbook";
 import CreateChapter from "./views/CreateChapter";
-
+import { UserContextWrapper } from "./context/UserContext";
 import LoginPage from "./views/LoginPage";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/user" element={<UserPage />} />
-          <Route
-            path="/create_workbook/:author_id"
-            element={<CreateWorkbook />}
-          />
-          <Route
-            path="/create_chapter/:workbook_id/:chapter_id"
-            element={<CreateChapter />}
-          />
-        </Routes>
-      </BrowserRouter>
+      <UserContextWrapper>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/user" element={<UserPage />} />
+            <Route
+              path="/create_workbook/:author_id"
+              element={<CreateWorkbook />}
+            />
+            <Route
+              path="/create_chapter/:workbooks_id/:chapter_number"
+              element={<CreateChapter />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </UserContextWrapper>
     </>
   );
 }

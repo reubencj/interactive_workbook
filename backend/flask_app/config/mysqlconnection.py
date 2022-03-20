@@ -14,7 +14,7 @@ class MySQLConnection:
     def query_db(self, query, data = None):
         with self.connection.cursor() as cursor:
             try:
-                query = cursor.mogrify(query,data)
+                # query = cursor.mogrify(query,data)
                 print("Running Query: ", query)
                 cursor.execute(query,data)
 
@@ -33,6 +33,29 @@ class MySQLConnection:
             
             finally:
                 self.connection.close()
+    
+    def exequte_many_query(self, query, data):
+        with self.connection.cursor() as cursor:
+            try:
+                query = cursor.mogrify(query,data)
+                print("Running Query: ", query)
+                cursor.executemany(query,data)
+
+                if query.lower().find("select") >= 0:
+                    result =  cursor.fetchall()
+                    return result
+                elif query.lower().find("insert") >=0:
+                    self.connection.commit()
+                    return cursor.lastrowid
+                else:
+                    self.connection.commit()
+                    
+            except Exception as e:
+                print("something went wrong, ", e)
+            
+            finally:
+                self.connection.close()
+
 
 def connectToMySQL():
     return MySQLConnection('workbook_schema')
