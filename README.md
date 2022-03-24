@@ -1,4 +1,4 @@
-# interactive_workbook
+# Intereactive Workbook
 
 ## Solo Project for Coding Dojo
 
