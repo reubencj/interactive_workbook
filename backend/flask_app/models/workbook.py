@@ -46,8 +46,36 @@ class Workbook:
         return connectToMySQL().query_db(query,data)
     
     @staticmethod
-    def get_all_workbooks():
-        query = "SELECT * from workbooks"
-        return connectToMySQL().query_db(query)
+    def get_all_workbooks(id):
+        data = {"id":id}
+        query = """SELECT w.*, CONCAT(u.first_name,' ',u.last_name) author_name, if(aw.users_id, true, false) workbook_added from workbooks w join users u on u.id = w.author_id left join added_workbooks aw on w.id = aw.workbooks_id and aw.users_id = %(id)s"""
+        return connectToMySQL().query_db(query,data)
 
+    @staticmethod
+    def update_workbook(data):
+        query = """UPDATE workbooks SET name = %(name)s, description = %(description)s where id = %(id)s and author_id = %(author_id)s"""
+        return connectToMySQL().query_db(query,data)
 
+    @staticmethod
+    def author_get_one_workbook(workbooks_id, author_id):
+        data = {"workbooks_id": workbooks_id, "author_id": author_id}
+        query = "SELECT * from workbooks where id = %(workbooks_id)s and author_id = %(author_id)s"
+        return connectToMySQL().query_db(query,data)
+
+    @staticmethod
+    def workbook_added_by_user(users_id, workbooks_id):
+        data = {"users_id": users_id, "workbooks_id": workbooks_id}
+        query = "INSERT INTO added_workbooks(workbooks_id, users_id) values(%(workbooks_id)s,%(users_id)s)"
+        return connectToMySQL().query_db(query,data)
+
+    @staticmethod
+    def get_one_workbook(workbooks_id):
+        data = {"workbooks_id": workbooks_id}
+        query = "SELECT * from workbooks where id = %(workbooks_id)s"
+        return connectToMySQL().query_db(query,data)
+    
+    @staticmethod
+    def delete_workbook_by_id(id, author_id):
+        data = {"id": id, "author_id": author_id}
+        query = "DELETE FROM workbooks where id = %(id)s and author_id = %(author_id)s"
+        return connectToMySQL().query_db(query,data)

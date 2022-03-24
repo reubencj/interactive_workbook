@@ -1,4 +1,5 @@
 
+from email import message
 import re
 import os
 from flask_app import app
@@ -53,15 +54,25 @@ def login():
    if not  bcrypt.check_password_hash(user.password, request.json["login_password"]):
       return jsonify( {"login_password": "password does not match"}), 400
    
-   session_data = User.convert_to_user_json(user)
-   access_token = create_access_token(identity = session_data)
-   return jsonify(access_token = access_token)
+   user_name = user.first_name
+   token = {"user_id": user.id, "is_author": user.is_author }
+   access_token = create_access_token(token)
+   return jsonify(access_token = access_token, user_name = user_name.capitalize())
 
-
-@app.route('/welcome', methods=['GET'])
-@jwt_required()
-def welcome():
+@app.route("/author_login",methods=['POST'])
+def author_login():
+   user = User.get_user_by_email(request.json["login_email"])
+   if not user:
+      return jsonify({"login_email": "email does not exist, please sign up"}), 400
    
-   print(get_jwt_identity())
-   return jsonify(request = "Welcome")
+   if not  bcrypt.check_password_hash(user.password, request.json["login_password"]):
+      return jsonify( {"login_password": "password does not match"}), 400
+   
+   if not user.is_author:
+      return jsonify({"login_email": "User is not an author"}), 400
+   
+   user_name = user.first_name
+   token = {"user_id": user.id, "is_author": user.is_author }
+   access_token = create_access_token(token)
+   return jsonify(access_token = access_token, user_name = user_name.capitalize())
 

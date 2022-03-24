@@ -1,0 +1,8 @@
+1) Author
+    - Dashboard- done
+    - Chapter View - done
+    - Edit section chapter and description
+2) User
+    - Dashboard - done
+    - Chapter View - done
+    - Response View - done

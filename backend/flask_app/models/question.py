@@ -25,9 +25,10 @@ class Question:
     
 
     @staticmethod
-    def get_all_questions_by_chapter_id( id):
-        data = {"id": id}
-        query = "select * from question where chapters_id = %(id)s"
+    def get_questions_and_response( chapters_id, users_id):
+        data = {"chapters_id": chapters_id, "users_id": users_id}
+        query = """select q.id questions_id, q.content, question_number, r.id response_id, response_text, users_id  
+        from questions q left join response r on r.questions_id = q.id and r.users_id = %(users_id)s where q.chapters_id = %(chapters_id)s"""
         return connectToMySQL().query_db(query, data)
     
 
@@ -37,13 +38,15 @@ class Question:
         return connectToMySQL().query_db(query, data)
     
     @staticmethod
-    def save_all_responses_for_questions(data):
+    def save_response(response_text, users_id, questions_id):
+        data = {"response_text": response_text, "users_id": users_id, "questions_id": questions_id  }
         query= "INSERT INTO response(response_text, questions_id, users_id) values(%(response_text)s, %(questions_id)s, %(users_id)s)"
-        return connectToMySQL().exequte_many_query(query, data)
+        return connectToMySQL().query_db(query, data)
     
 
     @staticmethod
-    def update_all_responses(data):
+    def update_response(response_id, response_text):
+        data = {"id": response_id, "response_text":response_text }
         query= "UPDATE response SET response_text = %(response_text)s where id = %(id)s"
-        return connectToMySQL().exequte_many_query(query, data)
+        return connectToMySQL().query_db(query, data)
 

@@ -8,12 +8,18 @@ import axios from "axios";
 const UserViewChapter = (props) => {
   const [chapterData, setChapterData] = useState({});
   const { chapter_id } = useParams();
+  const nav = useNavigate();
 
   useEffect(() => {
     axios
       .get(`http://localhost:8000/get_chapter/${chapter_id}`)
       .then((res) => setChapterData(res.data))
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err.response);
+        if (err.response.status >= 400 && err.response.status < 500) {
+          nav("/");
+        }
+      });
   }, []);
 
   return (

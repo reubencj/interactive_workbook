@@ -21,7 +21,7 @@ class User:
         
         query = """INSERT INTO users(first_name,last_name, email, password, is_author) 
         values(%(first_name)s, %(last_name)s,%(email)s, %(password)s,%(is_author)s)"""
-        connectToMySQL().query_db(query,data)
+        return connectToMySQL().query_db(query,data)
     
     @classmethod
     def get_user_by_email(cls,email):
@@ -30,6 +30,13 @@ class User:
         result =  connectToMySQL().query_db(query,data)
         if result:
             return cls(result[0])
+
+    @staticmethod
+    def get_author_by_id(id):
+        data = {"id": id}
+        query = "SELECT * FROM users where is_author = 1 and id = %(id)s"
+        return connectToMySQL().query_db(query,data)
+    
 
 
     @staticmethod
@@ -55,17 +62,9 @@ class User:
             errors["confirm_password"] = "Passwords do not match"
         return errors
     
-    @staticmethod
-    def convert_to_user_json(user):
-        
-        result = {
-            "first_name": user.first_name, 
-            "id": user.id,
-            "email": user.email, 
-            "is_author": user.is_author
-        }
-        return result
+   
 
+   
         
 
 

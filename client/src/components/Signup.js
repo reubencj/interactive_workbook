@@ -3,7 +3,6 @@ import axios from "axios";
 import Textbox from "./Textbox";
 import Selection from "./Selection";
 import Alert from "./Alert";
-import UserContext from "../context/UserContext";
 
 const Signup = (props) => {
   const [firstName, setFirstName] = useState("");
@@ -47,8 +46,12 @@ const Signup = (props) => {
       .then((resp) => {
         console.log(resp.data);
         setSuccess(resp.data);
-        // setLoginUser(resp.data.session_data);
         setError({});
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
       })
       .catch((err) => setError(err.response.data));
   };

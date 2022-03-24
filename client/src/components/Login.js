@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import Textbox from "./Textbox";
 import Alert from "./Alert";
-import UserContext from "../context/UserContext";
+import AppContext from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
@@ -12,9 +12,27 @@ const Login = (props) => {
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
-  const { userContext, setUserContext } = useContext(UserContext);
+  const { appContext, setAppContext } = useContext(AppContext);
 
-  const handleLogin = (e) => {
+  const handleAuthorLogin = (e) => {
+    e.preventDefault();
+    const data = {
+      login_email: loginEmail,
+      login_password: loginPassword,
+    };
+
+    axios
+      .post("http://localhost:8000/author_login", data)
+      .then((resp) => {
+        console.log(resp.data);
+        sessionStorage.setItem("access_token", resp.data.access_token);
+        setAppContext({ ...appContext, user_name: resp.data.user_name });
+        setErrors({});
+        navigate("/author_dashboard");
+      })
+      .catch((err) => setErrors(err.response.data));
+  };
+  const handleUserLogin = (e) => {
     e.preventDefault();
     const data = {
       login_email: loginEmail,
@@ -26,15 +44,15 @@ const Login = (props) => {
       .then((resp) => {
         console.log(resp.data);
         sessionStorage.setItem("access_token", resp.data.access_token);
-        setUserContext(resp.data.access_token);
+        setAppContext({ ...appContext, user_name: resp.data.user_name });
         setErrors({});
-        navigate("/user");
+        navigate("/user_dashboard");
       })
       .catch((err) => setErrors(err.response.data));
   };
 
   return (
-    <form onSubmit={handleLogin}>
+    <form>
       <h2>Login</h2>
       <Textbox
         label="Email"
@@ -53,8 +71,11 @@ const Login = (props) => {
       />
       {errors.login_password && <Alert label={errors.login_password} />}
 
-      <button type="submit" className="btn btn-success">
-        Login
+      <button className="btn btn-success mx-2" onClick={handleAuthorLogin}>
+        Login as Author
+      </button>
+      <button className="btn btn-primary" onClick={handleUserLogin}>
+        Login as User
       </button>
       {success.message && <Alert label={success.message} success />}
     </form>
