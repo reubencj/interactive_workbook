@@ -40,6 +40,7 @@ def create_user():
    
    #hash password
    data["password"] = bcrypt.generate_password_hash(data["password"])
+   
    #create user
    User.create_user(data)
    return jsonify(message = "New User Created! Please Login" )
