@@ -11,7 +11,7 @@ import UserDashboard from "./views/user/UserDashboard";
 import UserChaptersView from "./views/user/UserChaptersView";
 import UserChapter from "./views/user/UserChapter";
 import EditSummary from "./views/author/EditSummary";
-
+import EditChapter from "./views/author/EditChapter";
 function App() {
   return (
     <>
@@ -38,6 +38,10 @@ function App() {
             element={<UserChapter />}
           />
           <Route path="/edit_summary/:workbook_id" element={<EditSummary />} />
+          <Route
+            path="/edit_chapter/:workbook_id/:chapter_id"
+            element={<EditChapter />}
+          />
         </Routes>
       </BrowserRouter>
     </>

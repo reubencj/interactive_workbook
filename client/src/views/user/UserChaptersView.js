@@ -16,10 +16,11 @@ const UserChaptersView = (props) => {
   const [chapters, setChapters] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const { workbook_id } = useParams();
+  const SERVER_URL = process.env.REACT_APP_SEVER_URL;
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/get_chapters/${workbook_id}`, HEADER)
+      .get(`${SERVER_URL}/get_chapters/${workbook_id}`, HEADER)
       .then((res) => {
         setChapters(res.data.result);
         setLoaded(true);

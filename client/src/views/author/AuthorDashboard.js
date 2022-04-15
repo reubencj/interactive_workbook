@@ -15,14 +15,15 @@ const AuthorDashboard = (props) => {
   const nav = useNavigate();
   const [workbooks, setWorkbooks] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const SERVER_URL = process.env.REACT_APP_SEVER_URL;
 
   useEffect(() => {
+    console.log(SERVER_URL);
     axios
-      .get("http://localhost:8000/get_author_workbooks", HEADER)
+      .get(`${SERVER_URL}/get_author_workbooks`, HEADER)
       .then((res) => {
         setWorkbooks(res.data.result);
         setLoaded(true);
-        console.log(workbooks);
       })
       .catch((err) => {
         console.log(err.response);

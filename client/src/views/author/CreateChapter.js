@@ -16,6 +16,8 @@ const CreateChapter = (props) => {
   const [errors, setError] = useState({});
   const [success, setSuccess] = useState({});
   const nav = useNavigate();
+  const SERVER_URL = process.env.REACT_APP_SEVER_URL;
+
   const HEADER = {
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("access_token")}`,
@@ -43,7 +45,7 @@ const CreateChapter = (props) => {
     };
 
     axios
-      .post("http://localhost:8000/create_chapter", data, HEADER)
+      .post(`${SERVER_URL}/create_chapter`, data, HEADER)
       .then((resp) => {
         console.log(resp.data);
         setSuccess(resp.data);
@@ -87,7 +89,7 @@ const CreateChapter = (props) => {
               name="video"
               value={video_url}
               setState={setVideoUrl}
-              label="Video Url"
+              label="Youtube Video ID"
             />
             <Textarea
               name="content"

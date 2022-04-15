@@ -16,10 +16,11 @@ const UserDashboard = (props) => {
   const [workbooks, setWorkbooks] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [toggleRefresh, setToggleRefresh] = useState(false);
+  const SERVER_URL = process.env.REACT_APP_SEVER_URL;
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/get_all_workbooks", HEADER)
+      .get(`${SERVER_URL}/get_all_workbooks`, HEADER)
       .then((res) => {
         setWorkbooks(res.data.result);
         setLoaded(true);

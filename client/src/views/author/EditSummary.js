@@ -10,7 +10,7 @@ const EditSummary = (props) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-
+  const SERVER_URL = process.env.REACT_APP_SEVER_URL;
   const [errors, setError] = useState({});
   const [updated, setUpdated] = useState("");
   const [deleted, setDeleted] = useState("");
@@ -24,7 +24,7 @@ const EditSummary = (props) => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/workbook_summary/${workbook_id}`, HEADER)
+      .get(`${SERVER_URL}/workbook_summary/${workbook_id}`, HEADER)
       .then((res) => {
         console.log(res.data);
         setId(res.data.result.id);

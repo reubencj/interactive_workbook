@@ -49,4 +49,11 @@ class Question:
         data = {"id": response_id, "response_text":response_text }
         query= "UPDATE response SET response_text = %(response_text)s where id = %(id)s"
         return connectToMySQL().query_db(query, data)
+    
+    @staticmethod 
+    def get_questions_by_chapter_id(id):
+        query = """select *  from questions 
+                where chapters_id = %(id)s"""
+        data = {"id" : id}
+        return connectToMySQL().query_db(query,data)
 

@@ -8,6 +8,7 @@ import AuthorNav from "../../components/AuthorNav";
 const CreateWorkbook = (props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const SERVER_URL = process.env.REACT_APP_SEVER_URL;
 
   const [errors, setError] = useState({});
   const [success, setSuccess] = useState({});
@@ -26,7 +27,7 @@ const CreateWorkbook = (props) => {
     };
 
     axios
-      .post("http://localhost:8000/create_workbook", data, HEADER)
+      .post(`${SERVER_URL}/create_workbook`, data, HEADER)
       .then((resp) => {
         console.log(resp.data);
         setSuccess(resp.data);

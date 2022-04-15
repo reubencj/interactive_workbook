@@ -17,10 +17,11 @@ const AuthorChaptersView = (props) => {
   const [loaded, setLoaded] = useState(false);
   const { workbook_id } = useParams();
   const [toggle, setToggle] = useState(false);
+  const SERVER_URL = process.env.REACT_APP_SEVER_URL;
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/get_chapters/${workbook_id}`, HEADER)
+      .get(`${SERVER_URL}/get_chapters/${workbook_id}`, HEADER)
       .then((res) => {
         setChapters(res.data.result);
         setLoaded(true);
@@ -60,6 +61,15 @@ const AuthorChaptersView = (props) => {
                     title={`Chapter ${chp.chapter_number}`}
                     image={bookmark}
                   >
+                    <button
+                      className="btn btn-primary mb-2"
+                      onClick={(e) =>
+                        nav(`/edit_chapter/${workbook_id}/${chp.id}`)
+                      }
+                    >
+                      Edit
+                    </button>
+
                     <button
                       className="btn btn-danger"
                       onClick={(e) => handleDelete(e, chp.id, workbook_id)}

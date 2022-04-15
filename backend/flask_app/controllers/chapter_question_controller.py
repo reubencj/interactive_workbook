@@ -1,5 +1,4 @@
-from crypt import methods
-from email import message
+
 from flask_app.models.chapter import Chapter
 from flask_app.models.question import Question
 from flask_app import app
@@ -38,16 +37,23 @@ def create_chapter_and_questions():
 
     return jsonify(message = "created")
 
-
-@app.route("/get_chapters/<int:workbook_id>")
+# get chapter and question for author view
+@app.route("/get_chapter/<int:chapter_id>")
 @jwt_required()
-def get_chapters(workbook_id):
-    result = Chapter.get_all_chapters_by_workbook_id(workbook_id)
-    if not result:
-        return jsonify(message = "workbook not found"), 404
+def get_chapter(chapter_id):
+    chapter = Chapter.get_chapter_by_id(chapter_id)
     
-    return jsonify(result = result)
+    if not chapter:
+        return jsonify(message = "chapter not found"),404
+    
+    questions = Question.get_questions_by_chapter_id(chapter_id)
 
+    return jsonify(chapter = chapter, questions = questions)
+
+
+
+
+# get chapter questions and response for user view
 @app.route("/chapter_response/<int:chapter_id>")
 @jwt_required()
 def chapter_response(chapter_id):
@@ -74,6 +80,7 @@ def save_response():
 
     return jsonify(message = "all good")
 
+# delete chapter from author view
 @app.route("/delete_chapter",methods=["POST"])
 @jwt_required()
 def delete_chapter():
@@ -84,3 +91,39 @@ def delete_chapter():
 
     result =  Chapter.delete_chapter_by_id(request.json["id"])
     return jsonify(result = result)
+
+
+
+@app.route("/get_chapters/<int:workbook_id>")
+@jwt_required()
+def get_chapters(workbook_id):
+    result = Chapter.get_all_chapters_by_workbook_id(workbook_id)
+    if not result:
+        return jsonify(message = "workbook not found"), 404
+    
+    return jsonify(result = result)
+
+
+@app.route("/update_chapter",methods= ["POST"])
+@jwt_required()
+def update_chapter():
+    chapter = request.json["chapter"]
+    questions = request.json["questions"]
+
+    print(chapter)
+    print(questions)
+
+    user = get_jwt_identity()
+    
+    if user["is_author"] == 0:
+        return jsonify (message = "not an author"), 401
+    
+    print(Chapter.update_chapter(chapter))
+
+    for ques in questions:
+        print(Question.update_questions(ques))
+    
+    return jsonify(message = "updated")
+    
+
+

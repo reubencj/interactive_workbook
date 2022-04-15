@@ -31,8 +31,8 @@ class Chapter:
 
 
     @staticmethod
-    def update_chapter(data):
-        query = "UPDATE chapters SET title = %(title)s content = %(content)s video_url = %(video_url)s where id = %(id)s"
+    def update_chapter(data  ):
+        query = "UPDATE chapters SET title = %(title)s, content = %(content)s, video_url = %(video_url)s where id = %(id)s"
         return connectToMySQL().query_db(query, data)
     
     @staticmethod
@@ -58,5 +58,17 @@ class Chapter:
         data = {"id": id}
         query = "DELETE FROM chapters where id = %(id)s"
         return connectToMySQL().query_db(query,data)
+    
+
+    # @staticmethod
+    # def get_chapter_and_questions_by_id(id):
+    #     query = """select c.id, c.title, c.content, c.video_url, 
+    #             c.workbooks_id, q.id question_id, q.content question_content, 
+    #             q.question_number from chapters c
+	# 	        left join questions q
+    #             on c.id = q.chapters_id where c.id = %(id)s"""
+    #     data = {"id" : id}
+    #     return connectToMySQL().query_db(query,data)
+
 
 
