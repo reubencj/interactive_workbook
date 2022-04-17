@@ -65,20 +65,21 @@ const UserChapter = (props) => {
 
           <div className="container-md mt-3 shadow p-3 my-5 bg-white rounded  ">
             <h1 className="mt-3 text-center">{chapter.title}</h1>
+
+            <div className="mt-3">{parse(chapter.content)}</div>
             <div className="align-self-center mt-3  ">
               {chapter.video_url !== "" && (
                 <Video youtube_id={chapter.video_url} />
               )}
             </div>
-
-            <div className="mt-3">{parse(chapter.content)}</div>
+            <h4 className="text-muted mt-4">Questions</h4>
             {questions.map((q, index) => {
               return (
                 <div className="mt-3" key={q.questions_id}>
-                  <h3>{q.content}</h3>
+                  <h4 className="text-muted">{q.content}</h4>
                   <textarea
                     rows={3}
-                    className="form-control w-50"
+                    className="form-control"
                     value={q.response_text || ""}
                     onChange={(e) => handleChange(e.target.value, index)}
                   ></textarea>

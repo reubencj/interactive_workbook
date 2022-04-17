@@ -5,7 +5,7 @@ import { useState, React, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TextEditor from "../../components/TextEditor";
-
+import AuthorNav from "../../components/AuthorNav";
 const CreateChapter = (props) => {
   const { workbooks_id, chapter_number } = useParams();
   const [title, setTitle] = useState("");
@@ -75,78 +75,85 @@ const CreateChapter = (props) => {
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md">
-          <form>
-            <h2>Chapter {chapter_number}</h2>
-            <Textbox
-              name="title"
-              value={title}
-              setState={setTitle}
-              label="Chapter Title"
-            />
-            <Textbox
-              name="video"
-              value={video_url}
-              setState={setVideoUrl}
-              label="Youtube Video ID"
-            />
-            <TextEditor value={content} setValue={setContent} label="Content" />
-            <Textbox
-              name="number_of_question"
-              value={numOfQuest}
-              setState={setNumOfQuest}
-              label="Number of Questions"
-              type="number"
-            />
-            {numOfQuest > 0 &&
-              qlist.map((num) => {
-                return (
-                  <div key={num}>
-                    <label className="form-label">Question{num}</label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      name="question"
-                      onChange={(e) =>
-                        setQuestions({
-                          ...questions,
-                          [`question${num}`]: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                );
-              })}
+    <>
+      <AuthorNav />
+      <div className="container">
+        <div className="row">
+          <div className="col-md">
+            <form>
+              <h2>Chapter {chapter_number}</h2>
+              <Textbox
+                name="title"
+                value={title}
+                setState={setTitle}
+                label="Chapter Title"
+              />
+              <Textbox
+                name="video"
+                value={video_url}
+                setState={setVideoUrl}
+                label="Youtube Video ID"
+              />
+              <TextEditor
+                value={content}
+                setValue={setContent}
+                label="Content"
+              />
+              <Textbox
+                name="number_of_question"
+                value={numOfQuest}
+                setState={setNumOfQuest}
+                label="Number of Questions"
+                type="number"
+              />
+              {numOfQuest > 0 &&
+                qlist.map((num) => {
+                  return (
+                    <div key={num}>
+                      <label className="form-label">Question{num}</label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        name="question"
+                        onChange={(e) =>
+                          setQuestions({
+                            ...questions,
+                            [`question${num}`]: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  );
+                })}
 
-            <div className="d-flex mt-2 ">
-              <div className="mx-1">
-                <button
-                  onClick={(e) => {
-                    handleSumbit(e);
-                  }}
-                  className="btn btn-primary"
-                >
-                  Next Chapter
-                </button>
-              </div>
+              <div className="d-flex mt-2 ">
+                <div className="mx-1">
+                  <button
+                    onClick={(e) => {
+                      handleSumbit(e);
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Next Chapter
+                  </button>
+                </div>
 
-              <div>
-                <button
-                  onClick={(e) => {
-                    handleSumbit(e, false);
-                  }}
-                  className="btn btn-success "
-                >
-                  Complete Workbook
-                </button>
+                <div>
+                  <button
+                    onClick={(e) => {
+                      handleSumbit(e, false);
+                    }}
+                    className="btn btn-success "
+                  >
+                    Complete Workbook
+                  </button>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
