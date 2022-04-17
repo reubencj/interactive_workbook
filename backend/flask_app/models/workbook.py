@@ -48,7 +48,7 @@ class Workbook:
     @staticmethod
     def get_all_workbooks(id):
         data = {"id":id}
-        query = """SELECT w.*, CONCAT(u.first_name,' ',u.last_name) author_name, if(aw.users_id, true, false) workbook_added from workbooks w join users u on u.id = w.author_id left join added_workbooks aw on w.id = aw.workbooks_id and aw.users_id = %(id)s"""
+        query = """SELECT w.*, CONCAT(UPPER(SUBSTRING(u.first_name,1,1)),LOWER(SUBSTRING(u.first_name,2)), ' ',UPPER(SUBSTRING(u.last_name,1,1)),LOWER(SUBSTRING(u.last_name,2))) author_name, if(aw.users_id, true, false) workbook_added from workbooks w join users u on u.id = w.author_id left join added_workbooks aw on w.id = aw.workbooks_id and aw.users_id = %(id)s"""
         return connectToMySQL().query_db(query,data)
 
     @staticmethod
