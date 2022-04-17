@@ -1,10 +1,11 @@
 import Textbox from "../../components/Textbox";
-import Textarea from "../../components/Textarea";
+
 import Alert from "../../components/Alert";
 import { useState, React } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import AuthorNav from "../../components/AuthorNav";
+import TextEditor from "../../components/TextEditor";
 const CreateWorkbook = (props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -58,11 +59,10 @@ const CreateWorkbook = (props) => {
 
           {errors.name && <Alert label={errors.name} />}
 
-          <Textarea
+          <TextEditor
             label="Provide a brief description of the workbook"
-            name="description"
             value={description}
-            setState={setDescription}
+            setValue={setDescription}
           />
 
           {errors.description && <Alert label={errors.description} />}

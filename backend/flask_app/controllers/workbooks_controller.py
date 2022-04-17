@@ -61,6 +61,7 @@ def get_author_workbooks():
 def get_all_workbooks():
     user_id = get_jwt_identity()["user_id"]
     result = Workbook.get_all_workbooks(user_id)
+    
     return jsonify(result = result)
 
 @app.route("/add_workbook/<int:workbooks_id>")

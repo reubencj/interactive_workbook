@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import Alert from "../../components/Alert";
 import { useNavigate, useParams } from "react-router-dom";
 import UserNav from "../../components/UserNav";
-import ItemCard from "../../components/ItemCard";
-import bookmark from "../../assets/bookmark.png";
+import parse from "html-react-parser";
 import Video from "../../components/Video";
 
 const UserChapter = (props) => {
@@ -13,6 +12,7 @@ const UserChapter = (props) => {
   const { chapter_id, workbook_id } = useParams();
   const [completed, setCompleted] = useState();
   const nav = useNavigate();
+  const [loaded, setLoaded] = useState(false);
   const SERVER_URL = process.env.REACT_APP_SEVER_URL;
   const HEADER = {
     headers: {
@@ -26,6 +26,7 @@ const UserChapter = (props) => {
       .then((res) => {
         setChapter(res.data.chapter);
         setQuestions(res.data.questions);
+        setLoaded(true);
       })
       .catch((err) => {
         console.log(err.response);
@@ -51,47 +52,50 @@ const UserChapter = (props) => {
       .post("http://localhost:8000/save_response", data, HEADER)
       .then((res) => {
         setCompleted("Chapter Completed!");
-        setTimeout(() => nav(`/user_chapters_view/${workbook_id}`), 1000);
+        setTimeout(() => nav(-1), 1000);
       })
       .catch((err) => console.log(err));
   };
-
+  // `/user_chapters_view/${workbook_id}`
   return (
-    <div>
-      <UserNav />
+    <>
+      {loaded && (
+        <div>
+          <UserNav />
 
-      <div className="d-md-flex flex-column shadow p-3 my-5 bg-white rounded align-items-center ">
-        <h1 className="mt-3">{chapter.title}</h1>
-
-        {chapter.video_url !== "" && (
-          <div className="flex-grow-2">
-            <Video youtube_id={chapter.video_url} />
-          </div>
-        )}
-
-        <p className="mt-3">{chapter.content}</p>
-        {questions.map((q, index) => {
-          return (
-            <div className="mt-3" key={q.questions_id}>
-              <label className="form-label">{q.content}</label>
-              <textarea
-                rows={3}
-                className="form-control"
-                value={q.response_text || ""}
-                onChange={(e) => handleChange(e.target.value, index)}
-              ></textarea>
+          <div className="container-md mt-3 shadow p-3 my-5 bg-white rounded  ">
+            <h1 className="mt-3 text-center">{chapter.title}</h1>
+            <div className="align-self-center mt-3  ">
+              {chapter.video_url !== "" && (
+                <Video youtube_id={chapter.video_url} />
+              )}
             </div>
-          );
-        })}
-        <button
-          className="btn btn-success my-3"
-          onClick={(e) => handleComplete(e)}
-        >
-          Complete
-        </button>
-        {completed && <Alert success label={completed} />}
-      </div>
-    </div>
+
+            <div className="mt-3">{parse(chapter.content)}</div>
+            {questions.map((q, index) => {
+              return (
+                <div className="mt-3" key={q.questions_id}>
+                  <h3>{q.content}</h3>
+                  <textarea
+                    rows={3}
+                    className="form-control w-50"
+                    value={q.response_text || ""}
+                    onChange={(e) => handleChange(e.target.value, index)}
+                  ></textarea>
+                </div>
+              );
+            })}
+            <button
+              className="btn btn-success my-3 w-20 align-self-center"
+              onClick={(e) => handleComplete(e)}
+            >
+              Complete
+            </button>
+            {completed && <Alert success label={completed} />}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

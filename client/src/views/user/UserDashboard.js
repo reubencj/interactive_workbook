@@ -53,13 +53,15 @@ const UserDashboard = (props) => {
                 <div className="col-md-4 mt-4" key={wrk.id}>
                   <ItemCard
                     title={wrk.name}
-                    description={wrk.description}
+                    description={wrk.author_name}
                     image={book}
                   >
                     {wrk.workbook_added === 1 ? (
                       <button
                         className="btn btn-primary "
-                        onClick={(e) => nav(`/user_chapters_view/${wrk.id}`)}
+                        onClick={(e) =>
+                          nav(`/user_chapters_view/${wrk.id}`, { state: wrk })
+                        }
                       >
                         View Chapters
                       </button>

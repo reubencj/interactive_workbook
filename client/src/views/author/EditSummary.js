@@ -5,6 +5,7 @@ import { useState, React, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import AuthorNav from "../../components/AuthorNav";
+import TextEditor from "../../components/TextEditor";
 
 const EditSummary = (props) => {
   const [id, setId] = useState("");
@@ -77,7 +78,7 @@ const EditSummary = (props) => {
   return (
     <>
       <AuthorNav />
-      <div className="d-flex flex-column shadow p-3 my-5 bg-white rounded align-items-center ">
+      <div className="container-md shadow p-3 my-5 bg-white rounded align-items-center ">
         <form onSubmit={handleSumbit}>
           <h2>Create A New Workbook</h2>
 
@@ -90,13 +91,11 @@ const EditSummary = (props) => {
 
           {errors.name && <Alert label={errors.name} />}
 
-          <Textarea
+          <TextEditor
             label="Provide a brief description of the workbook"
-            name="description"
             value={description}
-            setState={setDescription}
+            setValue={setDescription}
           />
-
           {errors.description && <Alert label={errors.description} />}
 
           <button type="sumbit" className="btn btn-success">

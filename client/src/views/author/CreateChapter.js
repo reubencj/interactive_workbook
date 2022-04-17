@@ -4,6 +4,7 @@ import Alert from "../../components/Alert";
 import { useState, React, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import TextEditor from "../../components/TextEditor";
 
 const CreateChapter = (props) => {
   const { workbooks_id, chapter_number } = useParams();
@@ -91,12 +92,7 @@ const CreateChapter = (props) => {
               setState={setVideoUrl}
               label="Youtube Video ID"
             />
-            <Textarea
-              name="content"
-              value={content}
-              setState={setContent}
-              label="Content"
-            />
+            <TextEditor value={content} setValue={setContent} label="Content" />
             <Textbox
               name="number_of_question"
               value={numOfQuest}

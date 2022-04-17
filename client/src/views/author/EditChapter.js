@@ -5,6 +5,7 @@ import Textbox from "../../components/Textbox";
 import Textarea from "../../components/Textarea";
 import Alert from "../../components/Alert";
 import AuthorNav from "../../components/AuthorNav";
+import TextEditor from "../../components/TextEditor";
 const EditChapter = (props) => {
   const HEADER = {
     headers: {
@@ -92,10 +93,10 @@ const EditChapter = (props) => {
                   setState={handleChange(chapter, setChapter, "video_url")}
                   label="Youtube Video Id"
                 />
-                <Textarea
-                  name="content"
+
+                <TextEditor
                   value={chapter.content}
-                  setState={handleChange(chapter, setChapter, "content")}
+                  setValue={handleChange(chapter, setChapter, "content")}
                   label="Content"
                 />
 
