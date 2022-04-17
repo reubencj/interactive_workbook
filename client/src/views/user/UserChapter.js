@@ -60,9 +60,14 @@ const UserChapter = (props) => {
     <div>
       <UserNav />
 
-      <div className="d-flex flex-column shadow p-3 my-5 bg-white rounded align-items-center ">
+      <div className="d-md-flex flex-column shadow p-3 my-5 bg-white rounded align-items-center ">
         <h1 className="mt-3">{chapter.title}</h1>
-        {chapter.video_url !== "" && <Video youtube_id={chapter.video_url} />}
+
+        {chapter.video_url !== "" && (
+          <div className="flex-grow-2">
+            <Video youtube_id={chapter.video_url} />
+          </div>
+        )}
 
         <p className="mt-3">{chapter.content}</p>
         {questions.map((q, index) => {
