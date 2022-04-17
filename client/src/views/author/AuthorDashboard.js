@@ -42,11 +42,7 @@ const AuthorDashboard = (props) => {
             workbooks.map((wrk) => {
               return (
                 <div className="col-md-4 mt-4" key={wrk.id}>
-                  <ItemCard
-                    title={wrk.name}
-                    description={wrk.description}
-                    image={book}
-                  >
+                  <ItemCard title={wrk.name} image={book}>
                     <button
                       className="btn btn-primary "
                       onClick={(e) => nav(`/edit_summary/${wrk.id}`)}

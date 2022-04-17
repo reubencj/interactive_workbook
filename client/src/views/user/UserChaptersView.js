@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import UserNav from "../../components/UserNav";
-import { useNavigate, useParams } from "react-router-dom";
-
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import parse from "html-react-parser";
 import ItemCard from "../../components/ItemCard";
 import bookmark from "../../assets/bookmark.png";
 
@@ -17,6 +17,8 @@ const UserChaptersView = (props) => {
   const [loaded, setLoaded] = useState(false);
   const { workbook_id } = useParams();
   const SERVER_URL = process.env.REACT_APP_SEVER_URL;
+  const loc = useLocation();
+  const workbook_data = loc.state;
 
   useEffect(() => {
     axios
@@ -39,13 +41,20 @@ const UserChaptersView = (props) => {
       <UserNav />
       <div className="container-md mt-3">
         <div className="row">
+          <div className="col mt-4 ">
+            <h1 className="text-center">{workbook_data.name}</h1>
+            <h4 className="text-center">By: {workbook_data.author_name}</h4>
+            <div>{parse(workbook_data.description)}</div>
+          </div>
+        </div>
+        <div className="row">
           {loaded &&
             chapters.map((chp) => {
               return (
                 <div className="col-md-4 mt-4" key={chp.id}>
                   <ItemCard
-                    description={chp.title}
-                    title={`Chapter ${chp.chapter_number}`}
+                    title={chp.title}
+                    description={`Chapter ${chp.chapter_number}`}
                     image={bookmark}
                   >
                     <button

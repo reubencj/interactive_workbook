@@ -1,7 +1,6 @@
 import "./App.css";
-import { useEffect, useState, React } from "react";
-import axios from "axios";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthorDashboard from "./views/author/AuthorDashboard";
 import CreateWorkbook from "./views/author/CreateWorkbook";
 import CreateChapter from "./views/author/CreateChapter";
@@ -12,6 +11,7 @@ import UserChaptersView from "./views/user/UserChaptersView";
 import UserChapter from "./views/user/UserChapter";
 import EditSummary from "./views/author/EditSummary";
 import EditChapter from "./views/author/EditChapter";
+import TextEditor from "./components/TextEditor";
 function App() {
   return (
     <>
@@ -42,6 +42,7 @@ function App() {
             path="/edit_chapter/:workbook_id/:chapter_id"
             element={<EditChapter />}
           />
+          <Route path="/test" element={<TextEditor />} />
         </Routes>
       </BrowserRouter>
     </>
